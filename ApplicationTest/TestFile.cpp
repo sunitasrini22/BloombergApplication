@@ -27,10 +27,16 @@ namespace ApplicationTest
 		{
 
 			WordArray simWord;
-			Assert::AreEqual(0, simWord.getTotalWords(), L"Total number of words doesn't match");
+			Assert::AreEqual<int>(0, simWord.s_wordsArray.size(), L"Total number of words doesn't match");
 		}
 
-		
+
+		TEST_METHOD(TestReadInputWordsFromFileAndCheckWordListSize)
+		{
+			WordArray simWord;
+			simWord.readInputWords("../../ApplicationTest/Test1.txt");			
+			Assert::AreEqual<int>(6, simWord.s_wordsArray.size(), L"Total number of words doesn't match");
+		}
 
 	};
 }

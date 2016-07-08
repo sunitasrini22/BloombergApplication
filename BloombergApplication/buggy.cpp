@@ -17,7 +17,8 @@ static void workerThread(WordArray * arr)
 		{
 			//trying to eliminate the \n from the end of the string
 			int pos = s_word.data.find("\n");
-			s_word.data.replace(pos, 2, "");
+			if(pos>-1)
+				s_word.data.replace(pos, 2, "");
 			Word * w = new Word(s_word); // Copy the word
 			string end = "end";
 			endEncountered = (s_word.data.compare(end) == 0);
@@ -89,6 +90,7 @@ void WordArray::readInputWords(string fileName)
 	{
 		endEncountered = str.compare("end\n") == 0;
 		// Process str
+		auto x = this;
 		s_word.data = str;
 		// Pass the word to the worker thread
 		//strcpy(s_word.data, linebuf);
