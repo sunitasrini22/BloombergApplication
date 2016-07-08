@@ -1,16 +1,17 @@
 #include <thread>
 #include <vector>
 #include <algorithm>
-#include <cstdio>
-#include <cstring>
+#include <iostream>
+#include <string>
 
+using namespace std;
 struct Word
 {
 	char * data;
 	int count;
 
 	Word(char * data_) :
-		data(::strdup(data_))
+		data(::_strdup(data_))
 	{}
 
 	Word() :
@@ -75,7 +76,7 @@ static void readInputWords()
 
 	while (!endEncountered)
 	{
-		if (!std::gets(linebuf)) // EOF?
+		if (!std::fgets(linebuf,sizeof(linebuf),stdin)) // EOF?
 			return;
 
 		endEncountered = std::strcmp(linebuf, "end") == 0;
@@ -98,7 +99,7 @@ static void lookupWords()
 
 	for (;;)
 	{
-		std::printf("\nEnter a word for lookup:");
+		cout<<endl<<"Enter a word for lookup:";
 		if (std::scanf("%s", linebuf) == EOF)
 			return;
 
@@ -119,12 +120,11 @@ static void lookupWords()
 
 		if (found)
 		{
-			std::printf("SUCCESS: '%s' was present %d times in the initial word list\n",
-				s_wordsArray[i]->data, s_wordsArray[i]->count);
+			cout<<"SUCCESS: '"<< s_wordsArray[i]->data<<"' was present "<< s_wordsArray[i]->count <<" times in the initial word list"<<endl;
 			++s_totalFound;
 		}
 		else
-			std::printf("'%s' was NOT found in the initial word list\n", w->data);
+			cout<< w->data<<" was NOT found in the initial word list"<<endl;
 	}
 }
 
@@ -135,20 +135,20 @@ int main()
 		readInputWords();
 
 		// Sort the words alphabetically
-		std::sort(s_wordsArray.begin(), s_wordsArray.end());
+		sort(s_wordsArray.begin(), s_wordsArray.end());
 
 		// Print the word list
-		std::printf("\n=== Word list:\n");
+		cout<<endl<<"=== Word list:"<<endl;
 		for (auto p : s_wordsArray)
-			std::printf("%s %d\n", p->data, p->count);
+			cout<<p->data<<" "<<p->count<<endl;
 
 		lookupWords();
 
-		printf("\n=== Total words found: %d\n", s_totalFound);
+		cout << endl << "=== Total words found: " << s_totalFound << endl;
 	}
 	catch (std::exception & e)
 	{
-		std::printf("error %s\n", e.what());
+		cout<<"error "<<e.what()<<endl;
 	}
 
 	return 0;
