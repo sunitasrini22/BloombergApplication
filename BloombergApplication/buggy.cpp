@@ -38,12 +38,11 @@ public:
 	};
 	//void workerThread();
 	//private:
-	std::vector<Word*> s_wordsArray;
-	Word s_word;
+	std::vector<Word*> s_wordsArray;	
 	int s_totalFound;
 };
 
-
+static Word s_word;
 
 
 // Worker thread: consume words passed from the main thread and insert them
@@ -55,13 +54,13 @@ static void workerThread(WordArray * arr)
 	bool found = false;
 	while (!endEncountered)
 	{
-		if (arr->s_word.data[0]) // Do we have a new word?
+		if (s_word.data[0]) // Do we have a new word?
 		{
-			arr->s_word.data.replace(arr->s_word.data.length() - 1, 2, "");
-			Word * w = new Word(arr->s_word); // Copy the word
+			s_word.data.replace(s_word.data.length() - 1, 2, "");
+			Word * w = new Word(s_word); // Copy the word
 			string end = "end";
-			endEncountered = (arr->s_word.data.compare(end) == 0);
-			arr->s_word.data[0] = 0; // Inform the producer that we consumed the word
+			endEncountered = (s_word.data.compare(end) == 0);
+			s_word.data[0] = 0; // Inform the producer that we consumed the word
 			if (!endEncountered)
 			{
 				// Do not insert duplicate words
