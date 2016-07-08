@@ -19,15 +19,26 @@ struct Word
 	{}
 };
 
-static std::vector<Word*> s_wordsArray;
+class WordArray
+{
+public:
+	void readInputWords();
+	void lookupWords();
+	void sortWords();
+	void displayWords();
+	int getTotalWords() {
+		return s_totalFound;
+	};
+	//void workerThread();
+	int s_totalFound;
+	std::vector<Word*> s_wordsArray;	
+};
+
 static Word s_word;
-static int s_totalFound;
-
-
 // Worker thread: consume words passed from the main thread and insert them
 // in the 'word list' (s_wordsArray), while removing duplicates. Terminate when
 // the word 'end' is encountered.
-static void workerThread()
+static void workerThread(WordArray * arr)
 {
 	bool endEncountered = false;
 	bool found = false;
@@ -45,7 +56,7 @@ static void workerThread()
 			if (!endEncountered)
 			{
 				// Do not insert duplicate words
-				for (auto p : s_wordsArray)
+				for (auto p : arr->s_wordsArray)
 				{
 					if (!std::strcmp(p->data, w->data))
 					{
@@ -56,7 +67,7 @@ static void workerThread()
 				}
 
 				if (!found)
-					s_wordsArray.push_back(w);
+					arr->s_wordsArray.push_back(w);
 			}
 		}
 	}
@@ -66,11 +77,11 @@ static void workerThread()
 // inclusion in the word list.
 // Terminate when the word 'end' has been entered.
 //
-static void readInputWords()
+void WordArray::readInputWords()
 {
 	bool endEncountered = false;
 
-	std::thread * worker = new std::thread(workerThread);
+	std::thread * worker = new std::thread(workerThread,this);
 
 	char * linebuf = new char[32];
 
@@ -92,7 +103,7 @@ static void readInputWords()
 // Repeatedly ask the user for a word and check whether it was present in the word list
 // Terminate on EOF
 //
-static void lookupWords()
+void WordArray::lookupWords()
 {
 	bool found;
 	char * linebuf = new char[32];
@@ -128,23 +139,34 @@ static void lookupWords()
 	}
 }
 
+void WordArray::sortWords()
+{
+	sort(s_wordsArray.begin(), s_wordsArray.end());
+}
+
+void WordArray::displayWords()
+{
+	cout << endl << "=== Word list:" << endl;
+	for (auto p : s_wordsArray)
+		cout << endl << p->data << " " << p->count;
+}
+
 int main()
 {
 	try
 	{
-		readInputWords();
+		WordArray arr;
+		arr.readInputWords();
 
 		// Sort the words alphabetically
-		sort(s_wordsArray.begin(), s_wordsArray.end());
+		arr.sortWords();
 
 		// Print the word list
-		cout<<endl<<"=== Word list:"<<endl;
-		for (auto p : s_wordsArray)
-			cout<<p->data<<" "<<p->count<<endl;
+		arr.displayWords();
 
-		lookupWords();
+		arr.lookupWords();
 
-		cout << endl << "=== Total words found: " << s_totalFound << endl;
+		cout << endl << "=== Total words found: " << arr.getTotalWords() << endl;
 	}
 	catch (std::exception & e)
 	{
