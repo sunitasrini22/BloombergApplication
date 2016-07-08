@@ -1,46 +1,5 @@
-#include <thread>
-#include <vector>
-#include <algorithm>
-#include <iostream>
-#include <string>
-//#include <stdio.h>
+#include "buggy.h"
 
-#ifdef _MSC_VER
-#define _CRT_SECURE_NO_WARNINGS 1
-#endif
-
-using namespace std;
-struct Word
-{
-	string data;
-	int count;
-
-	Word(string data_) :
-		data(data_),
-		count(0)
-	{}
-
-	Word() :
-		data(""),
-		count(0)
-	{}
-};
-
-class WordArray
-{
-public:
-	void readInputWords();
-	void lookupWords();
-	void sortWords();
-	void displayWords();
-	int getTotalWords() {
-		return s_totalFound;
-	};
-	//void workerThread();
-	//private:
-	std::vector<Word*> s_wordsArray;	
-	int s_totalFound;
-};
 
 static Word s_word;
 
@@ -56,7 +15,9 @@ static void workerThread(WordArray * arr)
 	{
 		if (s_word.data[0]) // Do we have a new word?
 		{
-			s_word.data.replace(s_word.data.length() - 1, 2, "");
+			//trying to eliminate the \n from the end of the string
+			int pos = s_word.data.find("\n");
+			s_word.data.replace(pos, 2, "");
 			Word * w = new Word(s_word); // Copy the word
 			string end = "end";
 			endEncountered = (s_word.data.compare(end) == 0);
@@ -81,6 +42,10 @@ static void workerThread(WordArray * arr)
 	}
 };
 
+WordArray::WordArray()
+	:s_totalFound(0)
+{
+}
 // Read input words from STDIN and pass them to the worker thread for
 // inclusion in the word list.
 // Terminate when the word 'end' has been entered.
@@ -100,6 +65,31 @@ void WordArray::readInputWords()
 		endEncountered = std::strcmp(linebuf, "end\n") == 0;
 
 		s_word.data = linebuf;
+		// Pass the word to the worker thread
+		//strcpy(s_word.data, linebuf);
+
+		while (s_word.data[0]); // Wait for the worker thread to consume it
+	}
+
+	worker.join(); // Wait for the worker to terminate
+}
+
+//Unfortunately there is not thorough way of reproducing standard input via unit tests
+//So creating a mock readInputWords function to be able to read from files instead.
+void WordArray::readInputWords(string fileName)
+{
+	bool endEncountered = false;
+	std::thread worker(workerThread, this);
+
+	fstream inFile;
+	inFile.open(fileName);
+	string str;
+
+	while ((std::getline(inFile, str)) && (!endEncountered))
+	{
+		endEncountered = str.compare("end\n") == 0;
+		// Process str
+		s_word.data = str;
 		// Pass the word to the worker thread
 		//strcpy(s_word.data, linebuf);
 
