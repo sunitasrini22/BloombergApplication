@@ -183,8 +183,7 @@ int main()
 		cout << endl << "=== Total words found: " << arr.getTotalWords() << endl;
 		
 		//this is just to get the console stay up until the last message about the Total Words found shows up.
-		int n;
-		cin >> n;
+		_getch();
 	}
 	catch (std::exception & e)
 	{
