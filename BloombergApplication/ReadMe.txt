@@ -1,40 +1,11 @@
-========================================================================
-    CONSOLE APPLICATION : BloombergApplication Project Overview
-========================================================================
+Assumptions made:
+-This program starts with nothing displayed on the console. A blank console shows up since nothing about that was specifically mentioned in the problem statement.
+-The input needs to be a word or sentence per line.
+-Each of these words is added into the list of words passed in until the word end is encountered
+-end is not added to the list of words.
+-end needs to be added as its own line not as part of another word.
+-There is an extra "cin" at the end of the main function, this is only so that there is enough time to display the last statement that is printed out.
 
-AppWizard has created this BloombergApplication application for you.
-
-This file contains a summary of what you will find in each of the files that
-make up your BloombergApplication application.
-
-
-BloombergApplication.vcxproj
-    This is the main project file for VC++ projects generated using an Application Wizard.
-    It contains information about the version of Visual C++ that generated the file, and
-    information about the platforms, configurations, and project features selected with the
-    Application Wizard.
-
-BloombergApplication.vcxproj.filters
-    This is the filters file for VC++ projects generated using an Application Wizard. 
-    It contains information about the association between the files in your project 
-    and the filters. This association is used in the IDE to show grouping of files with
-    similar extensions under a specific node (for e.g. ".cpp" files are associated with the
-    "Source Files" filter).
-
-BloombergApplication.cpp
-    This is the main application source file.
-
-/////////////////////////////////////////////////////////////////////////////
-Other standard files:
-
-StdAfx.h, StdAfx.cpp
-    These files are used to build a precompiled header (PCH) file
-    named BloombergApplication.pch and a precompiled types file named StdAfx.obj.
-
-/////////////////////////////////////////////////////////////////////////////
-Other notes:
-
-AppWizard uses "TODO:" comments to indicate parts of the source code you
-should add to or customize.
-
-/////////////////////////////////////////////////////////////////////////////
+The TestFile.cpp has unit tests that test out some cases. Unfortunately since the problem statement needs input sent in from standard input, there's no way to do 
+that using unit tests hence some portions of the code could not be reached via tests but they have been tested manually. I had to also mock some portions of the
+code to read input from files instead of the console. These test files are also part of the same package. 
