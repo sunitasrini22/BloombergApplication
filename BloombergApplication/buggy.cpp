@@ -141,10 +141,14 @@ void WordArray::lookupWords()
 	}
 }
 
+
+bool myFunction(Word* a, Word* b) { return (a->data < b->data); }
+
 void WordArray::sortWords()
 {
-	sort(s_wordsArray.begin(), s_wordsArray.end());
+	sort(s_wordsArray.begin(), s_wordsArray.end(), myFunction);
 }
+
 
 void WordArray::displayWords()
 {
