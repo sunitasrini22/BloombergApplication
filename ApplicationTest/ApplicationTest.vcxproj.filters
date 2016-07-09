@@ -31,7 +31,16 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Test1.txt">
+    <Text Include="TestBlank.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="TestLong.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="TestRepeatingWords.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="TestUniqueWords.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>

@@ -2,8 +2,6 @@
 
 
 static Word s_word;
-
-
 // Worker thread: consume words passed from the main thread and insert them
 // in the 'word list' (s_wordsArray), while removing duplicates. Terminate when
 // the word 'end' is encountered.
@@ -109,17 +107,22 @@ void WordArray::readInputWords(string fileName)
 
 void WordArray::lookupWords()
 {
-	char * linebuf = new char[32];
+	char * linebuf = new char[256];
 
 	for (;;)
 	{
-		std::printf("\nEnter a word for lookup:");
-		if (std::scanf("%s", linebuf) == EOF)
+		cout <<endl<<"Enter a word for lookup:";
+		if (!fgets(linebuf,sizeof(linebuf),stdin))
 			return;
 
 		// Initialize the word to search for
 		Word * w = new Word();
 		w->data = linebuf;
+
+		//getting rid of the "\n" from the string
+		int pos = w->data.find("\n");
+		if (pos>-1)
+			w->data.replace(pos, 2, "");
 
 		int i = findWord(w);
 		if (i != -1)

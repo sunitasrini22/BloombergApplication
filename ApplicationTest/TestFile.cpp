@@ -21,14 +21,14 @@ namespace ApplicationTest
 		TEST_METHOD(TestReadInputWordsFromFileAndCheckWordListSize)
 		{
 			WordArray simWord;
-			simWord.readInputWords("../../ApplicationTest/Test1.txt");			
+			simWord.readInputWords("../../ApplicationTest/TestUniqueWords.txt");			
 			Assert::AreEqual<int>(6, simWord.s_wordsArray.size(), L"Total number of words doesn't match");
 		}
 
 		TEST_METHOD(TestReadInputWordsFromFileAndVerifyMatchingWords)
 		{
 			WordArray simWord;
-			simWord.readInputWords("../../ApplicationTest/Test1.txt");			
+			simWord.readInputWords("../../ApplicationTest/TestUniqueWords.txt");			
 
 			vector<string> expectedWords;
 			expectedWords.push_back("sunita");
@@ -47,7 +47,7 @@ namespace ApplicationTest
 		TEST_METHOD(TestReadAndSortWordsFromFileAndVerifyMatchingWords)
 		{
 			WordArray simWord;
-			simWord.readInputWords("../../ApplicationTest/Test1.txt");
+			simWord.readInputWords("../../ApplicationTest/TestUniqueWords.txt");
 			simWord.sortWords();
 			
 			vector<string> expectedWords;
@@ -68,7 +68,7 @@ namespace ApplicationTest
 		TEST_METHOD(TestReadFromFileAndLookupWords)
 		{
 			WordArray simWord;
-			simWord.readInputWords("../../ApplicationTest/Test1.txt");
+			simWord.readInputWords("../../ApplicationTest/TestUniqueWords.txt");
 			Word* w = new Word("performing");
 			Assert::AreEqual(0, simWord.getTotalWords(), L"Total found words should be 0");
 			simWord.findWord(w);
@@ -79,7 +79,7 @@ namespace ApplicationTest
 		TEST_METHOD(TestReadFromFileAndLookupWordsNonExistent)
 		{
 			WordArray simWord;
-			simWord.readInputWords("../../ApplicationTest/Test1.txt");
+			simWord.readInputWords("../../ApplicationTest/TestUniqueWords.txt");
 			Word* w = new Word("can");
 			Assert::AreEqual(0, simWord.getTotalWords(), L"Total found words should be 0");
 			simWord.findWord(w);
@@ -90,7 +90,7 @@ namespace ApplicationTest
 		TEST_METHOD(TestLookupWordsNonExistent)
 		{
 			WordArray simWord;
-			simWord.readInputWords("../../ApplicationTest/Test1.txt");
+			simWord.readInputWords("../../ApplicationTest/TestUniqueWords.txt");
 			Word* w = new Word("can");
 			int i = simWord.findWord(w);
 			Assert::AreEqual<int>(-1, i, L"index returned by findWord should be -1 since the word is not found.");
@@ -100,11 +100,27 @@ namespace ApplicationTest
 		TEST_METHOD(TestLookupWordsForMatchingCount)
 		{
 			WordArray simWord;
-			simWord.readInputWords("../../ApplicationTest/Test1.txt");
+			simWord.readInputWords("../../ApplicationTest/TestUniqueWords.txt");
 			Word* w = new Word("performing");
 			int i = simWord.findWord(w);
 			Assert::IsTrue(i > -1, L"The index returned from findWord should be greater than -1");
 			Assert::AreEqual<int>(1, simWord.s_wordsArray[i]->count, L"Count of words found should be 1");
+
+		}
+
+		TEST_METHOD(TestRepeatingWords)
+		{
+			WordArray simWord;
+			simWord.readInputWords("../../ApplicationTest/TestRepeatingWords.txt");
+			Word* w = new Word("you");
+			int i = simWord.findWord(w);
+			Assert::IsTrue(i > -1, L"The index returned from findWord should be greater than -1");
+			Assert::AreEqual<int>(2, simWord.s_wordsArray[i]->count, L"The word you should have appeared twice");
+
+			w->data = "can";
+			i = simWord.findWord(w);
+			Assert::IsTrue(i > -1, L"The index returned from findWord should be greater than -1");
+			Assert::AreEqual<int>(1, simWord.s_wordsArray[i]->count, L"The word can should have appeared once");
 
 		}
 
