@@ -14,7 +14,8 @@ static void workerThread(WordArray * arr)
 		{
 			bool found = false;
 			//trying to eliminate the \n from the end of the string
-			int pos = s_word.data.find("\n");
+			//technically we wouldn't need this if scanf worked fine, but it doesn't so we need to eliminate the \n
+			int pos = (int)s_word.data.find("\n");
 			if(pos>-1)
 				s_word.data.replace(pos, 2, "");
 			Word * w = new Word(s_word); // Copy the word
@@ -63,10 +64,9 @@ void WordArray::readInputWords()
 
 		endEncountered = std::strcmp(linebuf, "end\n") == 0;
 
+		// Pass the word to the worker thread
 		s_word.data = linebuf;
 		s_word.count = 1;
-		// Pass the word to the worker thread
-		//strcpy(s_word.data, linebuf);
 
 		while (s_word.data[0]); // Wait for the worker thread to consume it
 	}
@@ -120,7 +120,8 @@ void WordArray::lookupWords()
 		w->data = linebuf;
 
 		//getting rid of the "\n" from the string
-		int pos = w->data.find("\n");
+		//technically we wouldn't need this if scanf worked fine, but it doesn't so we need to eliminate the \n
+		int pos = (int)w->data.find("\n");
 		if (pos>-1)
 			w->data.replace(pos, 2, "");
 
@@ -185,6 +186,10 @@ int main()
 		arr.lookupWords();
 
 		cout << endl << "=== Total words found: " << arr.getTotalWords() << endl;
+		
+		//this is just to get the console stay up until the last message about the Total Words found shows up.
+		int n;
+		cin >> n;
 	}
 	catch (std::exception & e)
 	{
