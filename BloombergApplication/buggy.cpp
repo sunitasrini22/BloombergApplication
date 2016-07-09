@@ -107,7 +107,6 @@ void WordArray::readInputWords(string fileName)
 
 void WordArray::lookupWords()
 {
-	bool found;
 	char * linebuf = new char[32];
 
 	for (;;)
@@ -120,25 +119,24 @@ void WordArray::lookupWords()
 		Word * w = new Word();
 		w->data = linebuf;
 
-		// Search for the word
-		unsigned i;
-		for (i = 0; i < s_wordsArray.size(); ++i)
-		{
-			if (s_wordsArray[i]->data.compare(w->data) == 0)
-			{
-				found = true;
-				break;
-			}
-		}
-
-		if (found)
-		{
-			cout<<"SUCCESS: '"<< s_wordsArray[i]->data<<"' was present "<< s_wordsArray[i]->count<<" times in the initial word list"<<endl;
-			++s_totalFound;
-		}
-		else
-			cout<<"'"<<w->data<<"' was NOT found in the initial word list"<<endl;
+		findWord(w);
 	}
+}
+
+void WordArray::findWord(Word * w)
+{
+	// Search for the word
+	unsigned i;
+	for (i = 0; i < s_wordsArray.size(); ++i)
+	{
+		if (s_wordsArray[i]->data.compare(w->data) == 0)
+		{
+			cout << "SUCCESS: '" << s_wordsArray[i]->data << "' was present " << s_wordsArray[i]->count << " times in the initial word list" << endl;
+			++s_totalFound;
+			return;
+		}
+	}
+	cout << "'" << w->data << "' was NOT found in the initial word list" << endl;
 }
 
 

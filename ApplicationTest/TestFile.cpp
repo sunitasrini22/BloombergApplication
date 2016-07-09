@@ -78,5 +78,16 @@ namespace ApplicationTest
 			}
 		}
 
+		TEST_METHOD(TestReadFromFileAndLookupWords)
+		{
+			WordArray simWord;
+			simWord.readInputWords("../../ApplicationTest/Test1.txt");
+			Word* w = new Word("performing");
+			Assert::AreEqual(0, simWord.getTotalWords(), L"Total found words should be 0");
+			simWord.findWord(w);
+			Assert::AreEqual(1, simWord.getTotalWords(), L"Total found words should be 1");
+
+		}
+
 	};
 }

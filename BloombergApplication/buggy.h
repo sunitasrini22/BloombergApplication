@@ -31,6 +31,7 @@ public:
 	void lookupWords();
 	void sortWords();
 	void displayWords();
+	void findWord(Word* w);
 	int getTotalWords() {
 		return s_totalFound;
 	};
