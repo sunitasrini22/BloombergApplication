@@ -8,11 +8,11 @@ static Word s_word;
 static void workerThread(WordArray * arr)
 {
 	bool endEncountered = false;
-	bool found = false;
 	while (!endEncountered)
 	{
 		if (s_word.data[0]) // Do we have a new word?
 		{
+			bool found = false;
 			//trying to eliminate the \n from the end of the string
 			int pos = s_word.data.find("\n");
 			if(pos>-1)
