@@ -55,14 +55,15 @@ void WordArray::readInputWords()
 	bool endEncountered = false;
 	std::thread worker(workerThread, this);
 
-	char * linebuf = new char[256];
+	string linebuf;
 
 	while (!endEncountered)
 	{
-		if (!fgets(linebuf, sizeof(linebuf), stdin)) // EOF?
+		if(!getline(cin, linebuf)) //EOF?
 			return;
 
-		endEncountered = std::strcmp(linebuf, "end\n") == 0;
+		string end = "end";
+		endEncountered = linebuf.compare(end) == 0;
 
 		// Pass the word to the worker thread
 		s_word.data = linebuf;
@@ -107,23 +108,17 @@ void WordArray::readInputWords(string fileName)
 
 void WordArray::lookupWords()
 {
-	char * linebuf = new char[256];
+	string linebuf;
 
 	for (;;)
 	{
 		cout <<endl<<"Enter a word for lookup:";
-		if (!fgets(linebuf,sizeof(linebuf),stdin))
+		if (!getline(cin, linebuf))
 			return;
 
 		// Initialize the word to search for
 		Word * w = new Word();
 		w->data = linebuf;
-
-		//getting rid of the "\n" from the string
-		//technically we wouldn't need this if scanf worked fine, but it doesn't so we need to eliminate the \n
-		int pos = (int)w->data.find("\n");
-		if (pos>-1)
-			w->data.replace(pos, 2, "");
 
 		int i = findWord(w);
 		if (i != -1)
