@@ -20,9 +20,9 @@ static void workerThread(WordArray * arr)
 			if(pos>-1)
 				s_word.data.replace(pos, 2, "");
 			Word * w = new Word(s_word); // Copy the word
-			string end = "end";
-			endEncountered = (s_word.data.compare(end) == 0);
 			s_word.data[0] = 0; // Inform the producer that we consumed the word
+			string end = "end";
+			endEncountered = (w->data.compare(end) == 0);
 			if (!endEncountered)
 			{
 				// Do not insert duplicate words
@@ -56,7 +56,7 @@ void WordArray::readInputWords()
 	bool endEncountered = false;
 	std::thread worker(workerThread, this);
 
-	char * linebuf = new char[32];
+	char * linebuf = new char[256];
 
 	while (!endEncountered)
 	{
@@ -66,6 +66,7 @@ void WordArray::readInputWords()
 		endEncountered = std::strcmp(linebuf, "end\n") == 0;
 
 		s_word.data = linebuf;
+		s_word.count = 1;
 		// Pass the word to the worker thread
 		//strcpy(s_word.data, linebuf);
 
@@ -75,7 +76,7 @@ void WordArray::readInputWords()
 	worker.join(); // Wait for the worker to terminate
 }
 
-//Unfortunately there is not thorough way of reproducing standard input via unit tests
+//Unfortunately there is no thorough way of reproducing standard input via unit tests
 //So creating a mock readInputWords function to be able to read from files instead.
 void WordArray::readInputWords(string fileName)
 {
@@ -92,6 +93,7 @@ void WordArray::readInputWords(string fileName)
 		// Process str
 		auto x = this;
 		s_word.data = str;
+		s_word.count = 1;
 		// Pass the word to the worker thread
 		//strcpy(s_word.data, linebuf);
 

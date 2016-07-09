@@ -93,7 +93,7 @@ namespace ApplicationTest
 			simWord.readInputWords("../../ApplicationTest/Test1.txt");
 			Word* w = new Word("can");
 			int i = simWord.findWord(w);
-			Assert::AreEqual<int>(0, simWord.s_wordsArray[i]->count, L"Count of words found should be 0");
+			Assert::AreEqual<int>(-1, i, L"index returned by findWord should be -1 since the word is not found.");
 
 		}
 
@@ -103,6 +103,7 @@ namespace ApplicationTest
 			simWord.readInputWords("../../ApplicationTest/Test1.txt");
 			Word* w = new Word("performing");
 			int i = simWord.findWord(w);
+			Assert::IsTrue(i > -1, L"The index returned from findWord should be greater than -1");
 			Assert::AreEqual<int>(1, simWord.s_wordsArray[i]->count, L"Count of words found should be 1");
 
 		}
