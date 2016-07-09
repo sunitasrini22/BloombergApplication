@@ -119,11 +119,21 @@ void WordArray::lookupWords()
 		Word * w = new Word();
 		w->data = linebuf;
 
-		findWord(w);
+		int i = findWord(w);
+		if (i != -1)
+		{
+			cout << "SUCCESS: '" << s_wordsArray[i]->data << "' was present " << s_wordsArray[i]->count << " times in the initial word list" << endl;
+		}
+		else
+		{
+			cout << "'" << w->data << "' was NOT found in the initial word list" << endl;
+		}
 	}
 }
 
-void WordArray::findWord(Word * w)
+//Again there is no way to test LookupWords entirely via unit tests since it needs std inputs
+//So creating this function to be used by unit tests.
+int WordArray::findWord(Word * w)
 {
 	// Search for the word
 	unsigned i;
@@ -131,20 +141,19 @@ void WordArray::findWord(Word * w)
 	{
 		if (s_wordsArray[i]->data.compare(w->data) == 0)
 		{
-			cout << "SUCCESS: '" << s_wordsArray[i]->data << "' was present " << s_wordsArray[i]->count << " times in the initial word list" << endl;
 			++s_totalFound;
-			return;
+			return i;
 		}
 	}
-	cout << "'" << w->data << "' was NOT found in the initial word list" << endl;
+	return -1;
 }
 
 
-bool myFunction(Word* a, Word* b) { return (a->data < b->data); }
+bool sortFunction(Word* a, Word* b) { return (a->data < b->data); }
 
 void WordArray::sortWords()
 {
-	sort(s_wordsArray.begin(), s_wordsArray.end(), myFunction);
+	sort(s_wordsArray.begin(), s_wordsArray.end(), sortFunction);
 }
 
 

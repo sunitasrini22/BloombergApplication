@@ -3,19 +3,6 @@
 #include "../BloombergApplication/buggy.cpp"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
-/*
-class SimWordArray : public WordArray
-{
-public:
-	SimWordArray();
-	void readInputWords();
-	WordArray* warray;
-};
-
-void SimWordArray::readInputWords()
-{
-
-}*/
 
 namespace ApplicationTest
 {		
@@ -86,6 +73,37 @@ namespace ApplicationTest
 			Assert::AreEqual(0, simWord.getTotalWords(), L"Total found words should be 0");
 			simWord.findWord(w);
 			Assert::AreEqual(1, simWord.getTotalWords(), L"Total found words should be 1");
+
+		}
+
+		TEST_METHOD(TestReadFromFileAndLookupWordsNonExistent)
+		{
+			WordArray simWord;
+			simWord.readInputWords("../../ApplicationTest/Test1.txt");
+			Word* w = new Word("can");
+			Assert::AreEqual(0, simWord.getTotalWords(), L"Total found words should be 0");
+			simWord.findWord(w);
+			Assert::AreEqual(0, simWord.getTotalWords(), L"Total found words should be 0");
+
+		}
+
+		TEST_METHOD(TestLookupWordsNonExistent)
+		{
+			WordArray simWord;
+			simWord.readInputWords("../../ApplicationTest/Test1.txt");
+			Word* w = new Word("can");
+			int i = simWord.findWord(w);
+			Assert::AreEqual<int>(0, simWord.s_wordsArray[i]->count, L"Count of words found should be 0");
+
+		}
+
+		TEST_METHOD(TestLookupWordsForMatchingCount)
+		{
+			WordArray simWord;
+			simWord.readInputWords("../../ApplicationTest/Test1.txt");
+			Word* w = new Word("performing");
+			int i = simWord.findWord(w);
+			Assert::AreEqual<int>(1, simWord.s_wordsArray[i]->count, L"Count of words found should be 1");
 
 		}
 

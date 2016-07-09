@@ -13,7 +13,7 @@ struct Word
 
 	Word(string data_) :
 		data(data_),
-		count(0)
+		count(1)
 	{}
 
 	Word() :
@@ -31,7 +31,7 @@ public:
 	void lookupWords();
 	void sortWords();
 	void displayWords();
-	void findWord(Word* w);
+	int findWord(Word* w);
 	int getTotalWords() {
 		return s_totalFound;
 	};
