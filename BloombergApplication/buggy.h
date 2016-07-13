@@ -36,9 +36,10 @@ public:
 	int getTotalWords() {
 		return s_totalFound;
 	};
-	//bool myfunction(Word a, Word b);
-	//void workerThread();
-	//private:
+	void workerThread();
+	int getWordArraySize() { return (int)s_wordsArray.size(); }
+	vector<Word*> getWords() { return s_wordsArray; }
+private:
 	std::vector<Word*> s_wordsArray;
 	int s_totalFound;
 };

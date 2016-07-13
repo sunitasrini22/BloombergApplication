@@ -5,7 +5,7 @@ static Word s_word;
 // Worker thread: consume words passed from the main thread and insert them
 // in the 'word list' (s_wordsArray), while removing duplicates. Terminate when
 // the word 'end' is encountered.
-static void workerThread(WordArray * arr)
+void WordArray::workerThread()
 {
 	bool endEncountered = false;
 	while (!endEncountered)
@@ -25,7 +25,7 @@ static void workerThread(WordArray * arr)
 			if (!endEncountered)
 			{
 				// Do not insert duplicate words
-				for (auto p : arr->s_wordsArray)
+				for (auto p : s_wordsArray)
 				{
 					if (!p->data.compare(w->data))
 					{
@@ -35,7 +35,7 @@ static void workerThread(WordArray * arr)
 					}
 				}
 				if (!found)
-					arr->s_wordsArray.push_back(w);
+					s_wordsArray.push_back(w);
 			}
 
 		}
@@ -53,7 +53,7 @@ WordArray::WordArray()
 void WordArray::readInputWords()
 {
 	bool endEncountered = false;
-	std::thread worker(workerThread, this);
+	std::thread worker(&WordArray::workerThread, this);
 
 	string linebuf;
 
@@ -80,7 +80,7 @@ void WordArray::readInputWords()
 void WordArray::readInputWords(string fileName)
 {
 	bool endEncountered = false;
-	std::thread worker(workerThread, this);
+	std::thread worker(&WordArray::workerThread, this);
 
 	fstream inFile;
 	inFile.open(fileName);

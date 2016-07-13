@@ -14,7 +14,7 @@ namespace ApplicationTest
 		{
 
 			WordArray simWord;
-			Assert::AreEqual(0, (int)simWord.s_wordsArray.size(), L"Total number of words doesn't match");
+			Assert::AreEqual(0, simWord.getWordArraySize(), L"Total number of words doesn't match");
 		}
 
 
@@ -22,7 +22,7 @@ namespace ApplicationTest
 		{
 			WordArray simWord;
 			simWord.readInputWords("../../ApplicationTest/TestUniqueWords.txt");			
-			Assert::AreEqual(6, (int)simWord.s_wordsArray.size(), L"Total number of words doesn't match");
+			Assert::AreEqual(6, simWord.getWordArraySize(), L"Total number of words doesn't match");
 		}
 
 		TEST_METHOD(TestReadInputWordsFromFileAndVerifyMatchingWords)
@@ -37,10 +37,11 @@ namespace ApplicationTest
 			expectedWords.push_back("are");
 			expectedWords.push_back("you");
 			expectedWords.push_back("performing");
-			Assert::AreEqual(expectedWords.size(), simWord.s_wordsArray.size(), L"Total number of words doesn't match");
+			Assert::AreEqual((int)expectedWords.size(), simWord.getWordArraySize(), L"Total number of words doesn't match");
+			auto words = simWord.getWords();
 			for (int i = 0; i < expectedWords.size(); i++)
 			{
-				Assert::AreEqual(expectedWords[i], simWord.s_wordsArray[i]->data, L"Words read from file doesn't match expected set of words");
+				Assert::AreEqual(expectedWords[i], words[i]->data, L"Words read from file doesn't match expected set of words");
 			}
 		}
 
@@ -58,10 +59,11 @@ namespace ApplicationTest
 			expectedWords.push_back("what");
 			expectedWords.push_back("you");
 			
-			Assert::AreEqual(expectedWords.size(), simWord.s_wordsArray.size(), L"Total number of words doesn't match");
+			Assert::AreEqual((int)expectedWords.size(), simWord.getWordArraySize(), L"Total number of words doesn't match");
+			auto words = simWord.getWords();
 			for (int i = 0; i < expectedWords.size(); i++)
 			{
-				Assert::AreEqual(expectedWords[i], simWord.s_wordsArray[i]->data, L"Words read from file doesn't match expected set of words");
+				Assert::AreEqual(expectedWords[i], words[i]->data, L"Words read from file doesn't match expected set of words");
 			}
 		}
 
@@ -104,7 +106,8 @@ namespace ApplicationTest
 			Word* w = new Word("performing");
 			int i = simWord.findWord(w);
 			Assert::IsTrue(i > -1, L"The index returned from findWord should be greater than -1");
-			Assert::AreEqual<int>(1, simWord.s_wordsArray[i]->count, L"Count of words found should be 1");
+			auto words = simWord.getWords();
+			Assert::AreEqual<int>(1, words[i]->count, L"Count of words found should be 1");
 
 		}
 
@@ -115,12 +118,14 @@ namespace ApplicationTest
 			Word* w = new Word("you");
 			int i = simWord.findWord(w);
 			Assert::IsTrue(i > -1, L"The index returned from findWord should be greater than -1");
-			Assert::AreEqual<int>(2, simWord.s_wordsArray[i]->count, L"The word you should have appeared twice");
+			auto words = simWord.getWords();
+			Assert::AreEqual<int>(2, words[i]->count, L"The word you should have appeared twice");
 
 			w->data = "can";
 			i = simWord.findWord(w);
 			Assert::IsTrue(i > -1, L"The index returned from findWord should be greater than -1");
-			Assert::AreEqual(1, simWord.s_wordsArray[i]->count, L"The word can should have appeared once");
+			auto words2 = simWord.getWords();
+			Assert::AreEqual(1, words2[i]->count, L"The word can should have appeared once");
 
 		}
 
@@ -129,7 +134,7 @@ namespace ApplicationTest
 			WordArray simWord;
 			simWord.readInputWords("../../ApplicationTest/TestBlank.txt");
 
-			Assert::AreEqual(0, (int)simWord.s_wordsArray.size(), L"Total number of words should be 0 since the file is blank");
+			Assert::AreEqual(0, simWord.getWordArraySize(), L"Total number of words should be 0 since the file is blank");
 			Word* w = new Word("you");
 			int i = simWord.findWord(w);
 			Assert::AreEqual(-1, i, L"The index returned from findWord should be -1 since no words are present");
@@ -143,11 +148,12 @@ namespace ApplicationTest
 			simWord.readInputWords("../../ApplicationTest/TestLong.txt");
 
 			//This file is a collection of 5 long sentences repeating 7 times, so the total number of words would still be 5
-			Assert::AreEqual(5, (int)simWord.s_wordsArray.size(), L"Total number of words should be 0 since the file is blank");
+			Assert::AreEqual(5, simWord.getWordArraySize(), L"Total number of words should be 0 since the file is blank");
 			Word* w = new Word("khsbfvhbsdfhvbsdfvbhskdjbjksfngkdfkb skfjgbkjnsfkjbgnfgglndsb");
 			int i = simWord.findWord(w);
 			Assert::IsTrue(i > -1, L"The index returned from findWord should be greater than -1");
-			Assert::AreEqual(7, (int)simWord.s_wordsArray[i]->count, L"The word can should have appeared 7 times");
+			auto words = simWord.getWords();
+			Assert::AreEqual(7, words[i]->count, L"The word can should have appeared 7 times");
 
 		}
 	};
